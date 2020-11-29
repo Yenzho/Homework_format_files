@@ -43,25 +43,25 @@ def quantity_dict_function(common_list):
     return quantity_dict
 
 
-def top_10_word(quantity_dict):
+def top_word(quantity_dict, quantity):
     """
-    Возвращает список топ-10 слов из словаря
+    Возвращает список топ слов из словаря
     """
-    number_list_top10 = list()
+    number_list_top = list()
     for number in quantity_dict.values():
-        number_list_top10.append(number)
-    number_list_top10.sort(reverse=True)
-    words_list_top10 = list()
-    for number_10 in number_list_top10[:10]:
+        number_list_top.append(number)
+    number_list_top.sort(reverse=True)
+    words_list_top = list()
+    for number_top in number_list_top[:quantity]:
         for word, number in quantity_dict.items():
-            if number_10 == number:
-                while len(words_list_top10) < 11:
-                    words_list_top10.append(word)
+            if number_top == number:
+                while len(words_list_top) < quantity  + 1:
+                    words_list_top.append(word)
                     break
-    return words_list_top10
+    return words_list_top
 
 
-def main(document):
+def main(document, quantity):
     file_extension = os.path.splitext(document)
     common_list = list()
     if '.json' in file_extension:
@@ -71,8 +71,8 @@ def main(document):
     else:
         print('Такого расширения пока нет')
     quantity_dict = quantity_dict_function(common_list)
-    top_10 = top_10_word(quantity_dict)
-    print(top_10)
+    top = top_word(quantity_dict, quantity)
+    print(top)
 
-main('newsafr.json')
-main('newsafr.xml')
+main('newsafr.json', 15)
+main('newsafr.xml', 14)
