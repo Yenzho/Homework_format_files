@@ -2,7 +2,7 @@ import json
 import xml.etree.ElementTree as ET
 import os
 
-def common_list_json_function(document):
+def common_list_json_function(document, symbol_limit=6):
     """
     Возврашает общий список с повторяющимися переменными из файла .json
     """
@@ -12,12 +12,12 @@ def common_list_json_function(document):
         for item in data['rss']['channel']['items']:
             description = item['description'].split(' ')
             for element in description:
-                if len(element) >= 6 and type(element) != int():
+                if len(element) >= symbol_limit and type(element) != int():
                     common_list.append(element)
         return common_list
 
 
-def common_list_xml_function(document):
+def common_list_xml_function(document, symbol_limit=6):
     """
     Возврашает общий список с повторяющимися переменными из файла .xml
     """
@@ -28,7 +28,7 @@ def common_list_xml_function(document):
     for item in root.findall('channel/item'):
         description = item.find('description').text.split(' ')
         for element in description:
-            if len(element) >= 6 and type(element) != int():
+            if len(element) >= symbol_limit and type(element) != int():
                 common_list.append(element)
     return common_list
 
@@ -61,18 +61,18 @@ def top_word(quantity_dict, quantity):
     return words_list_top
 
 
-def main(document, quantity):
+def main(document, symbol_limit, quantity):
     file_extension = os.path.splitext(document)
     common_list = list()
     if '.json' in file_extension:
-        common_list = common_list_json_function(document)
+        common_list = common_list_json_function(document, symbol_limit)
     elif '.xml' in file_extension:
-        common_list = common_list_xml_function(document)
+        common_list = common_list_xml_function(document, symbol_limit)
     else:
         print('Такого расширения пока нет')
     quantity_dict = quantity_dict_function(common_list)
     top = top_word(quantity_dict, quantity)
     print(top)
 
-main('newsafr.json', 15)
-main('newsafr.xml', 14)
+main('newsafr.json', 6, 15)
+main('newsafr.xml', 6, 14)
